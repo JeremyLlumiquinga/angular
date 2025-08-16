@@ -9,7 +9,8 @@ import { InvoiceDetail } from "../invoice-detail/invoice-detail";
 @Component({
   selector: 'app-invoice',
   imports: [CompanyViewComponent, CustomerViewComponent, InvoiceDetail],
-  templateUrl: './invoice.component.html'
+  templateUrl: './invoice.component.html',
+  
 })
 export class InvoiceComponent implements OnInit {
   invoice!:Invoice;
@@ -17,7 +18,17 @@ export class InvoiceComponent implements OnInit {
   constructor(private service:InvoiceService){} 
 
   ngOnInit(): void {
-    this.invoice=this.service.getInvoice();
+    console.log('InvoiceComponent: Iniciando la obtención de datos del backend...');
+    this.service.getInvoice().subscribe(
+      (data:Invoice)=> {
+        this.invoice = data;
+        console.log('Datos recibidos del backend:',data);
+      },
+      (error) => {
+        console.log('Error al obtener los datos del backend', error);
+        console.error('Asegurate de que el backend est e puerto 300');
+      }
+    );
   }
   
 }
